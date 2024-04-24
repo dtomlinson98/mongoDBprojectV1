@@ -42,12 +42,12 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 // Routes
 app.use("/", require("./routes/root"));
 
-// Insert states from statesData.json into MongoDB
+/* // Insert states from statesData.json into MongoDB
 const insertStatesFromJson =
   require("./controllers/statesController").insertStatesFromJson;
 insertStatesFromJson();
 
-app.use("/states", require("./routes/api/states"));
+app.use("/states", require("./routes/api/states")); */
 
 // 404 handler
 app.all("*", (req, res) => {
