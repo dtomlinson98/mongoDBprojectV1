@@ -1,7 +1,7 @@
 const fs = require("fs");
 const State = require("../model/States");
 
-const insertStatesFromJson = async () => {
+/* const insertStatesFromJson = async () => {
   try {
     // read states from statesData.json
     const statesData = JSON.parse(
@@ -41,7 +41,7 @@ const insertStatesFromJson = async () => {
   } catch (err) {
     console.error("Error inserting states:", err);
   }
-};
+}; */
 
 const getAllStates = async (req, res) => {
   try {
