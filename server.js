@@ -63,7 +63,7 @@ app.all("*", (req, res) => {
 
 app.use(errorHandler);
 
-// Function to post states data to the server
+/* // Function to post states data to the server
 const postDataToServer = async () => {
   try {
     // Load the states data from statesData.json
@@ -80,10 +80,10 @@ const postDataToServer = async () => {
   } catch (error) {
     console.error("Error posting data:", error.message);
   }
-};
+}; */
 
-// Post the states data when the server starts
-postDataToServer();
+/* // Post the states data when the server starts
+postDataToServer(); */
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");

@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3500:3500"
+    volumes:
+      - .:/var/www/html
+    # Add environment variables if needed
+    # environment:
+    #   - VARIABLE_NAME=value
