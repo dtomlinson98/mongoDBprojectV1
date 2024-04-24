@@ -139,7 +139,6 @@ const getState = async (req, res) => {
 };
 
 module.exports = {
-  insertStatesFromJson,
   getAllStates,
   createNewState,
   updateState,

@@ -6,7 +6,7 @@ const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middleware/logEvents");
 const errorHandler = require("./middleware/errorHandler");
-
+const statesRouter = require("./routes/api/states");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
@@ -41,6 +41,7 @@ app.use("/", express.static(path.join(__dirname, "/public")));
 
 // Routes
 app.use("/", require("./routes/root"));
+app.use("/states", statesRouter);
 
 /* // Insert states from statesData.json into MongoDB
 const insertStatesFromJson =
