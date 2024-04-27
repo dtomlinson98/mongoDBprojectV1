@@ -35,23 +35,14 @@ app.use(express.json());
 // Middleware for cookies
 app.use(cookieParser());
 
-/* // Serve static files
+// Serve static files
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 // Routes
-app.use("/", require("./routes/root"));
-app.use("/states", statesRouter); */
-
-// Serve static files
-app.use("/states", statesRouter);
-
-// Routes
-app.use("/", require("./routes/root"));
-
-// Serve index.html at the root URL
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
+app.use("/states", statesRouter);
 
 // 404 handler
 app.all("*", (req, res) => {

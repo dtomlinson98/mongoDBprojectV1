@@ -1,6 +1,5 @@
 const fs = require("fs");
 const State = require("../model/States");
-const statesData = require("../model/statesData.json");
 
 // function for GET all states
 const getAllStates = async (req, res) => {
