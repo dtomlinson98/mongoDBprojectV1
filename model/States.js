@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const stateSchema = new Schema({
   state: {
     type: String,
-    required: true,
     unique: true,
   },
   slug: String,

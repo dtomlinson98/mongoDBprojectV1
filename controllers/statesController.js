@@ -2,7 +2,7 @@ const fs = require("fs");
 const State = require("../model/States");
 const statesData = require("../model/statesData.json");
 
-// function for getting all states
+// function for GET all states
 const getAllStates = async (req, res) => {
   try {
     //read states from MongoDB and JSON file
@@ -31,79 +31,7 @@ const getAllStates = async (req, res) => {
   }
 };
 
-const createNewState = async (req, res) => {
-  const newState = new State({
-    //state: req.body.state,
-    //slug: req.body.slug,
-    code: req.body.code,
-    // nickname: req.body.nickname,
-    // website: req.body.website,
-    // admission_date: req.body.admission_date,
-    // admission_number: req.body.admission_number,
-    // capital_city: req.body.capital_city,
-    // capital_url: req.body.capital_url,
-    // population: req.body.population,
-    // population_rank: req.body.population_rank,
-    // constitution_url: req.body.constitution_url,
-    // state_flag_url: req.body.state_flag_url,
-    // state_seal_url: req.body.state_seal_url,
-    // map_image_url: req.body.map_image_url,
-    // landscape_background_url: req.body.landscape_background_url,
-    // skyline_background_url: req.body.skyline_background_url,
-    // twitter_url: req.body.twitter_url,
-    // facebook_url: req.body.facebook_url,
-    funfacts: req.body.funfacts,
-  });
-
-  try {
-    const savedState = await newState.save();
-    res.status(201).json(savedState);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-const updateState = async (req, res) => {
-  try {
-    const state = await State.findById(req.params.id);
-    if (!state) {
-      return res
-        .status(404)
-        .json({ message: `State with ID ${req.params.id} not found` });
-    }
-
-    Object.keys(req.body).forEach((key) => {
-      if (key !== "_id") {
-        state[key] = req.body[key];
-      }
-    });
-
-    const updatedState = await state.save();
-    res.json(updatedState);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-const deleteState = async (req, res) => {
-  try {
-    const state = await State.findById(req.params.id);
-    if (!state) {
-      return res
-        .status(404)
-        .json({ message: `State with ID ${req.params.id} not found` });
-    }
-
-    await state.remove();
-    res.json({
-      message: `State with ID ${req.params.id} deleted successfully`,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
-// function for single state
+// function for GET single state
 const getState = async (req, res) => {
   try {
     const state = req.state;
@@ -114,7 +42,7 @@ const getState = async (req, res) => {
   }
 };
 
-// function for state random fact
+// function for GET state random fact
 const getRandomFunFact = async (req, res) => {
   try {
     // Fetch the state from req.state object
@@ -122,7 +50,7 @@ const getRandomFunFact = async (req, res) => {
 
     // Check if the state exists and has a funfact
     if (state && state.funfact && state.funfact.length > 0) {
-      // Select a random funfact from the array of funfacts
+      // Select a random funfact from the array of funfact
       const randomFunFact =
         state.funfact[Math.floor(Math.random() * state.funfact.length)];
       res.json({ funfact: randomFunFact });
@@ -137,7 +65,7 @@ const getRandomFunFact = async (req, res) => {
   }
 };
 
-// function for state capital
+// function for GET state capital
 const getStateCapital = (req, res) => {
   try {
     const state = req.state;
@@ -155,7 +83,7 @@ const getStateCapital = (req, res) => {
   }
 };
 
-// function for state nickname
+// function for GET state nickname
 const getStateNickname = (req, res) => {
   try {
     const state = req.state;
@@ -173,7 +101,7 @@ const getStateNickname = (req, res) => {
   }
 };
 
-// function for state population
+// function for GET state population
 const getStatePopulation = (req, res) => {
   try {
     const state = req.state;
@@ -193,14 +121,15 @@ const getStatePopulation = (req, res) => {
   }
 };
 
-// function for state admission_date
+// function for GET state admission_date
 const getStateAdmissionDate = (req, res) => {
   try {
     const state = req.state;
 
-    // Check if state and admission date are retrieved
+    // if state and admision_date was retrieved
     if (state && state.admission_date) {
       res.json({ state: state.state, admitted: state.admission_date });
+      // this shouldn't trigger since all states have admission_dates in JSON
     } else {
       res
         .status(404)
@@ -212,15 +141,143 @@ const getStateAdmissionDate = (req, res) => {
   }
 };
 
+// function for POST funfact array
+const postFunFact = async (req, res) => {
+  try {
+    // set state code from request URL
+    const stateCode = req.state.code;
+    //console.log("State Code From URL:", stateCode);
+
+    // set fun facts array from the request body
+    const { funfact } = req.body;
+    //console.log("Fun Facts From URL Body:", funfact);
+
+    // fetch the state object from MongoDB
+    let mongoState = await State.findOne({ code: stateCode });
+
+    // if state is not in mongoDB, create it
+    if (!mongoState) {
+      mongoState = new State({
+        code: stateCode,
+        funfact: funfact,
+      });
+      // if state is already in mongoDB, push it
+    } else {
+      if (mongoState.funfact) {
+        mongoState.funfact.push(...funfact);
+      } else {
+        mongoState.funfact = funfact;
+      }
+    }
+
+    await mongoState.save();
+
+    // respond with what mongo recieved
+    res.status(200).json(mongoState);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// function for PATCH funfact array
+const patchFunFact = async (req, res) => {
+  try {
+    // set state code from request URL
+    const stateCode = req.state.code;
+    console.log("State Code From URL:", stateCode);
+
+    // set index and funfact from request body
+    let { index, funfact } = req.body;
+    //console.log("Index From User:", index);
+    //console.log("Fun Fact From User PATCH:", funfact);
+
+    // change user index to zero-based
+    index = index - 1;
+    //console.log("Zero-Based Index:", index);
+
+    // fetch object from MongoDB
+    let mongoState = await State.findOne({ code: stateCode });
+    //console.log("MongoDB Before PATCH:", mongoState);
+
+    // if state not found, 404
+    if (!mongoState) {
+      return res.status(404).json({ message: "State not found" });
+    }
+
+    // if there is a funfact and the index exitts
+    if (mongoState.funfact && mongoState.funfact.length > index && index >= 0) {
+      mongoState.funfact[index] = funfact;
+      //if index doesn't exist
+    } else {
+      return res.status(400).json({ message: "Invalid index" });
+    }
+
+    await mongoState.save();
+
+    // respond with updated mongoDB document
+    res.status(200).json(mongoState);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// function for DELETE funfact
+const deleteFunFact = async (req, res) => {
+  try {
+    // set state code from request URL
+    const stateCode = req.state.code;
+    console.log("State Code From URL:", stateCode);
+
+    // set index from request body
+    const { index } = req.body;
+    //console.log("Index to Delete:", index);
+
+    // change the index to zero-based for MongoDB
+    const adjustedIndex = index - 1;
+    //console.log("Adjusted Index:", adjustedIndex);
+
+    // fetch object from MongoDB
+    let mongoState = await State.findOne({ code: stateCode });
+    //console.log("Object in MongoDB:", mongoState);
+
+    // if state not found, 404
+    if (!mongoState) {
+      return res.status(404).json({ message: "State not found" });
+    }
+
+    // if index valid
+    if (
+      mongoState.funfact &&
+      mongoState.funfact.length > adjustedIndex &&
+      adjustedIndex >= 0
+    ) {
+      // delete funfact at the specified index
+      mongoState.funfact.splice(adjustedIndex, 1);
+    } else {
+      return res.status(400).json({ message: "Invalid index" });
+    }
+
+    await mongoState.save();
+
+    // respond with updated MongoDB document
+    res.status(200).json(mongoState);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   getAllStates,
-  createNewState,
-  updateState,
-  deleteState,
   getState,
   getRandomFunFact,
   getStateCapital,
   getStateNickname,
   getStatePopulation,
   getStateAdmissionDate,
+  postFunFact,
+  patchFunFact,
+  deleteFunFact,
 };

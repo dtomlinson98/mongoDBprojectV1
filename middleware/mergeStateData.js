@@ -14,7 +14,7 @@ const mergeStateData = async (req, res, next) => {
     }
 
     //logging output of mergedData
-    console.log("Merged State Object:", verifiedState);
+    //console.log("Merged State Object:", verifiedState);
 
     // Set req.state to the merged data
     req.state = verifiedState;

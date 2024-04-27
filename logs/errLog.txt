@@ -4,3 +4,4 @@
 20240420	23:18:41	fa391aa6-3141-4440-a346-2e3eb01ec748	TypeError: Cannot read properties of null (reading '1')
 20240422	13:25:12	c5afb592-b233-48a8-9167-3ffc22eee26e	TypeError: Cannot read properties of null (reading '1')
 20240422	13:26:06	e1a954c2-3859-4497-ac98-2089fe8eb92d	TypeError: Cannot read properties of null (reading '1')
+20240427	15:28:10	91af4718-e074-4027-a564-60490d5bcfbc	SyntaxError: Expected double-quoted property name in JSON at position 17
