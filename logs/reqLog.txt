@@ -228,3 +228,7 @@
 20240427	15:33:08	19995f22-9b8f-4019-9b28-aef27ad1e12e	PATCH	undefined	/states/ks/funfact
 20240427	15:34:48	2ff02195-90a2-44ac-8f5a-5706434d19cc	DELETE	undefined	/states/ks/funfact
 20240427	15:35:16	4cb368da-12a8-4902-b60d-ec8a1ada310f	DELETE	undefined	/states/ks/funfact
+20240427	15:41:45	13e5dac3-6586-43e2-9fc3-7e5befa5567f	GET	undefined	/
+20240427	16:32:54	50b99b7e-9395-4c62-8324-c834e0e7e038	GET	undefined	/states/
+20240427	16:33:01	75c4e1a7-5b72-4c89-bf09-9e379dbd2f34	GET	undefined	/states/ks
+20240427	16:33:12	0b20261f-254d-4777-a9e5-767c7bb00e30	GET	undefined	/

@@ -12,7 +12,6 @@ const credentials = require("./middleware/credentials");
 const mongoose = require("mongoose");
 const connectDB = require("./config/dbConn");
 const PORT = process.env.PORT || 3500;
-const axios = require("axios");
 
 // Connect to MongoDB
 connectDB();
@@ -36,19 +35,23 @@ app.use(express.json());
 // Middleware for cookies
 app.use(cookieParser());
 
-// Serve static files
+/* // Serve static files
 app.use("/", express.static(path.join(__dirname, "/public")));
 
 // Routes
 app.use("/", require("./routes/root"));
+app.use("/states", statesRouter); */
+
+// Serve static files
 app.use("/states", statesRouter);
 
-/* // Insert states from statesData.json into MongoDB
-const insertStatesFromJson =
-  require("./controllers/statesController").insertStatesFromJson;
-insertStatesFromJson();
+// Routes
+app.use("/", require("./routes/root"));
 
-app.use("/states", require("./routes/api/states")); */
+// Serve index.html at the root URL
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+});
 
 // 404 handler
 app.all("*", (req, res) => {
@@ -63,28 +66,6 @@ app.all("*", (req, res) => {
 });
 
 app.use(errorHandler);
-
-/* // Function to post states data to the server
-const postDataToServer = async () => {
-  try {
-    // Load the states data from statesData.json
-    const statesData = require("./model/statesData.json");
-    // Loop through each state in the statesData array
-    for (const state of statesData) {
-      // Post the state data to the server
-      const response = await axios.post(
-        `http://localhost:${PORT}/states`,
-        state
-      );
-      console.log(`Posted state ${state.state} successfully!`);
-    }
-  } catch (error) {
-    console.error("Error posting data:", error.message);
-  }
-}; */
-
-/* // Post the states data when the server starts
-postDataToServer(); */
 
 mongoose.connection.once("open", () => {
   console.log("Connected to MongoDB");
