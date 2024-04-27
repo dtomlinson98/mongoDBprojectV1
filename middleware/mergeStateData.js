@@ -2,16 +2,23 @@ const State = require("../model/States");
 
 const mergeStateData = async (req, res, next) => {
   try {
-    // get verified parameter
-    const stateCode = req.params.id;
+    // Get verified parameter from verifyStates middleware
+    const verifiedState = req.state;
 
-    // getting funfacts
-    const mongoState = await State.findOne({ code: stateCode });
+    // Getting funfacts from MongoDB
+    const mongoState = await State.findOne({ code: verifiedState.code });
 
-    // merging data from json and mongoDB
+    // If MongoDB has data for the state and it includes a funfact, add it to the state object
     if (mongoState && mongoState.funfact) {
-      req.state.funfact = mongoState.funfact;
+      verifiedState.funfact = mongoState.funfact;
     }
+
+    //logging output of mergedData
+    console.log("Merged State Object:", verifiedState);
+
+    // Set req.state to the merged data
+    req.state = verifiedState;
+
     next();
   } catch (err) {
     console.error(err);

@@ -6,6 +6,9 @@ const verifyStates = (req, res, next) => {
     const stateCode = req.params.id.toUpperCase();
     const state = statesData.find((state) => state.code === stateCode);
 
+    // Log the state object
+    console.log("Verify State object:", state);
+
     // if state not found 404
     if (!state) {
       return res
