@@ -28,7 +28,7 @@ const stateSchema = new Schema({
   skyline_background_url: String,
   twitter_url: String,
   facebook_url: String,
-  funfact: [String],
+  funfacts: [String],
 });
 
 module.exports = mongoose.model("State", stateSchema);

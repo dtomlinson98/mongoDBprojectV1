@@ -9,8 +9,8 @@ const mergeStateData = async (req, res, next) => {
     const mongoState = await State.findOne({ code: verifiedState.code });
 
     // If MongoDB has data for the state and it includes a funfact, add it to the state object
-    if (mongoState && mongoState.funfact) {
-      verifiedState.funfact = mongoState.funfact;
+    if (mongoState && mongoState.funfacts) {
+      verifiedState.funfacts = mongoState.funfacts;
     }
 
     //logging output of mergedData

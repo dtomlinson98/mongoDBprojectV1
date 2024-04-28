@@ -15,10 +15,10 @@ const getAllStates = async (req, res) => {
         const mongoState = mongoStates.find(
           (state) => state.code === jsonState.code
         );
-        // if state has funfact add it
-        if (mongoState && mongoState.funfact) {
-          return { ...jsonState, funfact: mongoState.funfact };
-          // if no funfact just return JSON
+        // if state has funfacts add it
+        if (mongoState && mongoState.funfacts) {
+          return { ...jsonState, funfacts: mongoState.funfacts };
+          // if no funfacts just return JSON
         } else {
           return jsonState;
         }
@@ -47,11 +47,11 @@ const getRandomFunFact = async (req, res) => {
     // Fetch the state from req.state object
     const state = req.state;
 
-    // Check if the state exists and has a funfact
-    if (state && state.funfact && state.funfact.length > 0) {
-      // Select a random funfact from the array of funfact
+    // Check if the state exists and has a funfacts
+    if (state && state.funfacts && state.funfacts.length > 0) {
+      // Select a random funfacts from the array of funfacts
       const randomFunFact =
-        state.funfact[Math.floor(Math.random() * state.funfact.length)];
+        state.funfacts[Math.floor(Math.random() * state.funfacts.length)];
       res.json({ funfact: randomFunFact });
     } else {
       res
@@ -140,7 +140,7 @@ const getStateAdmissionDate = (req, res) => {
   }
 };
 
-// function for POST funfact array
+// function for POST funfacts array
 const postFunFact = async (req, res) => {
   try {
     // set state code from request URL
@@ -148,8 +148,8 @@ const postFunFact = async (req, res) => {
     //console.log("State Code From URL:", stateCode);
 
     // set fun facts array from the request body
-    const { funfact } = req.body;
-    //console.log("Fun Facts From URL Body:", funfact);
+    const { funfacts } = req.body;
+    //console.log("Fun Facts From URL Body:", funfacts);
 
     // fetch the state object from MongoDB
     let mongoState = await State.findOne({ code: stateCode });
@@ -158,14 +158,14 @@ const postFunFact = async (req, res) => {
     if (!mongoState) {
       mongoState = new State({
         code: stateCode,
-        funfact: funfact,
+        funfact: funfacts,
       });
       // if state is already in mongoDB, push it
     } else {
-      if (mongoState.funfact) {
-        mongoState.funfact.push(...funfact);
+      if (mongoState.funfacts) {
+        mongoState.funfacts.push(...funfacts);
       } else {
-        mongoState.funfact = funfact;
+        mongoState.funfacts = funfacts;
       }
     }
 
@@ -179,17 +179,17 @@ const postFunFact = async (req, res) => {
   }
 };
 
-// function for PATCH funfact array
+// function for PATCH funfacts array
 const patchFunFact = async (req, res) => {
   try {
     // set state code from request URL
     const stateCode = req.state.code;
     console.log("State Code From URL:", stateCode);
 
-    // set index and funfact from request body
-    let { index, funfact } = req.body;
+    // set index and funfacts from request body
+    let { index, funfacts } = req.body;
     //console.log("Index From User:", index);
-    //console.log("Fun Fact From User PATCH:", funfact);
+    //console.log("Fun Fact From User PATCH:", funfacts);
 
     // change user index to zero-based
     index = index - 1;
@@ -204,9 +204,13 @@ const patchFunFact = async (req, res) => {
       return res.status(404).json({ message: "State not found" });
     }
 
-    // if there is a funfact and the index exitts
-    if (mongoState.funfact && mongoState.funfact.length > index && index >= 0) {
-      mongoState.funfact[index] = funfact;
+    // if there is a funfacts and the index exitts
+    if (
+      mongoState.funfacts &&
+      mongoState.funfacts.length > index &&
+      index >= 0
+    ) {
+      mongoState.funfacts[index] = funfacts;
       //if index doesn't exist
     } else {
       return res.status(400).json({ message: "Invalid index" });
@@ -222,7 +226,7 @@ const patchFunFact = async (req, res) => {
   }
 };
 
-// function for DELETE funfact
+// function for DELETE funfacts
 const deleteFunFact = async (req, res) => {
   try {
     // set state code from request URL
@@ -248,12 +252,12 @@ const deleteFunFact = async (req, res) => {
 
     // if index valid
     if (
-      mongoState.funfact &&
-      mongoState.funfact.length > adjustedIndex &&
+      mongoState.funfacts &&
+      mongoState.funfacts.length > adjustedIndex &&
       adjustedIndex >= 0
     ) {
-      // delete funfact at the specified index
-      mongoState.funfact.splice(adjustedIndex, 1);
+      // delete funfacts at the specified index
+      mongoState.funfacts.splice(adjustedIndex, 1);
     } else {
       return res.status(400).json({ message: "Invalid index" });
     }
