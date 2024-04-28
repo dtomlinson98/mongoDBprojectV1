@@ -6,3 +6,4 @@
 20240422	13:26:06	e1a954c2-3859-4497-ac98-2089fe8eb92d	TypeError: Cannot read properties of null (reading '1')
 20240427	15:28:10	91af4718-e074-4027-a564-60490d5bcfbc	SyntaxError: Expected double-quoted property name in JSON at position 17
 20240427	17:00:31	1d90db03-35ce-450c-8177-b5ee93077b7f	Error: ENOENT: no such file or directory, stat 'C:\Users\dylan\OneDrive\Documents\Web_Mobile _Dev\INF 653 BACKEND WEB DEV\mongoDB\routes\views\index.html'
+20240427	23:05:16	e1c6e30a-d42c-4392-9e81-a4b69397c909	TypeError: Cannot read properties of null (reading '1')

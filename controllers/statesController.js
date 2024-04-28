@@ -107,7 +107,9 @@ const getStatePopulation = (req, res) => {
 
     // if state and population are retrieved
     if (state && state.population) {
-      res.json({ state: state.state, population: state.population });
+      //adding commas in correct locations
+      const populationString = state.population.toLocaleString();
+      res.json({ state: state.state, population: populationString });
       // this shouldn't trigger since all states have populations in JSON
     } else {
       res
@@ -151,6 +153,19 @@ const postFunFact = async (req, res) => {
     const { funfacts } = req.body;
     //console.log("Fun Facts From URL Body:", funfacts);
 
+    // if funfacts were not provided
+    if (!funfacts) {
+      return res
+        .status(400)
+        .json({ message: "State fun facts value required" });
+      // if funfacts were not in an array
+    } else if (!Array.isArray(funfacts)) {
+      // if funfacts is not an array
+      return res
+        .status(400)
+        .json({ message: "State fun facts value must be an array" });
+    }
+
     // fetch the state object from MongoDB
     let mongoState = await State.findOne({ code: stateCode });
 
@@ -158,7 +173,7 @@ const postFunFact = async (req, res) => {
     if (!mongoState) {
       mongoState = new State({
         code: stateCode,
-        funfact: funfacts,
+        funfacts: funfacts,
       });
       // if state is already in mongoDB, push it
     } else {
@@ -184,38 +199,53 @@ const patchFunFact = async (req, res) => {
   try {
     // set state code from request URL
     const stateCode = req.state.code;
-    console.log("State Code From URL:", stateCode);
+    //console.log("State Code From URL:", stateCode);
 
     // set index and funfacts from request body
-    let { index, funfacts } = req.body;
+    let { index, funfact } = req.body;
     //console.log("Index From User:", index);
     //console.log("Fun Fact From User PATCH:", funfacts);
+
+    // if no index provided
+    if (!index) {
+      return res
+        .status(400)
+        .json({ message: "State fun fact index value required" });
+    }
 
     // change user index to zero-based
     index = index - 1;
     //console.log("Zero-Based Index:", index);
 
-    // fetch object from MongoDB
+    // if no funfact provided
+    if (!funfact) {
+      return res.status(400).json({ message: "State fun fact value required" });
+    }
+
+    // fetch mongoDB
     let mongoState = await State.findOne({ code: stateCode });
     //console.log("MongoDB Before PATCH:", mongoState);
 
-    // if state not found, 404
+    // if state not found 404
     if (!mongoState) {
       return res.status(404).json({ message: "State not found" });
     }
 
-    // if there is a funfacts and the index exitts
-    if (
-      mongoState.funfacts &&
-      mongoState.funfacts.length > index &&
-      index >= 0
-    ) {
-      mongoState.funfacts[index] = funfacts;
-      //if index doesn't exist
-    } else {
-      return res.status(400).json({ message: "Invalid index" });
+    // if no funfacts exits
+    if (!mongoState.funfacts) {
+      return res
+        .status(404)
+        .json({ message: `No Fun Facts found for ${stateCode}` });
     }
 
+    // if index doesn't existst
+    if (index < 0 || index >= mongoState.funfacts.length) {
+      return res
+        .status(400)
+        .json({ message: `No Fun Fact found at that index for ${stateCode}` });
+    }
+
+    mongoState.funfacts[index] = funfact;
     await mongoState.save();
 
     // respond with updated mongoDB document
@@ -227,15 +257,23 @@ const patchFunFact = async (req, res) => {
 };
 
 // function for DELETE funfacts
+// kind of redundant may be able to use merge/verify middlware
 const deleteFunFact = async (req, res) => {
   try {
     // set state code from request URL
     const stateCode = req.state.code;
-    console.log("State Code From URL:", stateCode);
+    //console.log("State Code From URL:", stateCode);
 
     // set index from request body
     const { index } = req.body;
     //console.log("Index to Delete:", index);
+
+    // if no index provided
+    if (!index) {
+      return res
+        .status(400)
+        .json({ message: "State fun fact index value required" });
+    }
 
     // change the index to zero-based for MongoDB
     const adjustedIndex = index - 1;
@@ -245,26 +283,57 @@ const deleteFunFact = async (req, res) => {
     let mongoState = await State.findOne({ code: stateCode });
     //console.log("Object in MongoDB:", mongoState);
 
-    // if state not found, 404
+    // if state not found in mongoDB check JSON file
     if (!mongoState) {
-      return res.status(404).json({ message: "State not found" });
+      const jsonData = fs.readFileSync("./model/statesData.json", "utf8");
+      const jsonStates = JSON.parse(jsonData);
+      const jsonState = jsonStates.find((state) => state.code === stateCode);
+
+      // if state not found in JSON file
+      if (!jsonState) {
+        return res.status(404).json({ message: "State not found" });
+      }
+
+      // if state found in JSON but has no funfacts
+      if (!jsonState.funfacts || jsonState.funfacts.length === 0) {
+        return (
+          res
+            .status(404)
+            // might need to adjust response!!
+            .json({ message: `No Fun Facts found for ${jsonState.state}` })
+        );
+      }
+
+      // if state found in JSON and has funfacts
+      return res.status(404).json({ message: "State not found in MongoDB" });
     }
 
-    // if index valid
-    if (
-      mongoState.funfacts &&
-      mongoState.funfacts.length > adjustedIndex &&
-      adjustedIndex >= 0
-    ) {
-      // delete funfacts at the specified index
-      mongoState.funfacts.splice(adjustedIndex, 1);
-    } else {
-      return res.status(400).json({ message: "Invalid index" });
+    // if no funfacts exist to delete
+    if (!mongoState.funfacts || mongoState.funfacts.length === 0) {
+      const jsonData = fs.readFileSync("./model/statesData.json", "utf8");
+      const jsonStates = JSON.parse(jsonData);
+      const jsonState = jsonStates.find((state) => state.code === stateCode);
+      return res
+        .status(404)
+        .json({ message: `No Fun Facts found for ${jsonState.state}` });
     }
+
+    // if index doesn't exist
+    if (adjustedIndex < 0 || adjustedIndex >= mongoState.funfacts.length) {
+      const jsonData = fs.readFileSync("./model/statesData.json", "utf8");
+      const jsonStates = JSON.parse(jsonData);
+      const jsonState = jsonStates.find((state) => state.code === stateCode);
+      return res.status(400).json({
+        message: `No Fun Fact found at that index for ${jsonState.state}`,
+      });
+    }
+
+    // delete funfacts
+    mongoState.funfacts.splice(adjustedIndex, 1);
 
     await mongoState.save();
 
-    // respond with updated MongoDB document
+    // respond mongoDB document
     res.status(200).json(mongoState);
   } catch (err) {
     console.error(err);
