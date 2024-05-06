@@ -37,7 +37,7 @@ const getState = async (req, res) => {
     res.json(state);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -60,7 +60,7 @@ const getRandomFunFact = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -78,7 +78,7 @@ const getStateCapital = (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -96,7 +96,7 @@ const getStateNickname = (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -118,7 +118,7 @@ const getStatePopulation = (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -138,7 +138,7 @@ const getStateAdmissionDate = (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -190,7 +190,7 @@ const postFunFact = async (req, res) => {
     res.status(200).json(mongoState);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -252,7 +252,7 @@ const patchFunFact = async (req, res) => {
     res.status(200).json(mongoState);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
@@ -337,7 +337,7 @@ const deleteFunFact = async (req, res) => {
     res.status(200).json(mongoState);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Issue" });
   }
 };
 
