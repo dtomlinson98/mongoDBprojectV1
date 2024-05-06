@@ -1,16 +1,13 @@
-# "Express JS Tutorial - User Roles and Permissions"
+Dylan Tomlinson
+Professor Gray
+INF 653
+May 8, 2024
 
-✅ [Check out my YouTube Channel with all of my tutorials](https://www.youtube.com/DaveGrayTeachesCode).
+Node.js REST API Final Project Challenges
 
-**Description:**
-
-This repository shares the code applied during the Youtube tutorial. The tutorial is part of a [Node.js & Express for Beginners Playlist](https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PFkIxaJ6Xx_X46avTM1aYw) on my channel.  
-
-[YouTube Tutorial](https://youtu.be/fUWkVxCv4IQ) for this repository.
-
-I suggest completing my [8 hour JavaScript course tutorial video](https://youtu.be/EfAl9bwzVZk) if you are new to Javascript.
-
-### Academic Honesty
-
-**DO NOT COPY FOR AN ASSIGNMENT** - Avoid plagiargism and adhere to the spirit of this [Academic Honesty Policy](https://www.freecodecamp.org/news/academic-honesty-policy/).
-# mongoDBprojectV1
+This project went a lot smoother for me compared to my midterm project. I had a better understanding going into it based on my experiences from the PHP project. I was able to set up my MVC files much more efficiently and I think I organized my code much more elegantly. I had far less redundancies and I could understand my code a lot better. With that being said, I still encountered many issues.
+The first set of issues came from JavaScript syntax (dot notation, anonymous functions, built in functions, etc.). It has been a couple semesters since I used JS and I was never an expert. Also being so involved with PHP during this semester, I had to be careful not to mix up my languages. I had to refer to W3 schools and other online tutorials to jog my memory on some JS syntax. However, once I got deeper into the project, I started to get more efficient with my JS.
+The next major issue I dealt with was my understanding of routes. Before I began this project, I did not have a full understanding of how to implement different routes. I understood their purpose but I knew I would have some difficulty writing the code for my project. After re-watching the course videos, I started to understand it a little better and I was able to get the GET all states function working which allowed me to understand the concept even better. Once I did, I certainly prefer using Node.js rather than PHP. The structure is a lot more streamlined, especially with the use of middleware functions that you can insert into your routes. That made it way easier for me to organize my code and understand what was happening at each point.
+That brings me to another point. I started using console.logs for debugging a lot more in this project. Don’t get me wrong, they have always been a useful tool I relied on when combing through errors, but in this project, I used them with way more frequency. Even if I was certain of what the output of a function should be, I still logged it to gain a better understanding of what was being passed to the next function. This saved me at several points because I realized I wasn’t getting the output I expected and it only required a small tweak of my code. This has taught me to not assume especially when so many functions are dependent on one another.
+I had some challenges writing the functions in the controller file but this was to be expected. I more or less completed them in the order that was given on the project requirements document and by the time I reached GET requests for capital, nickname, population I was moving much more quickly than I thought I would.
+Overall, I learned a lot from this project and I feel much more confident in my JS abilities and I want to get more into the Node framework. I am happy to have gained the experience and I’m eager to learn more.
